@@ -3,6 +3,27 @@
 Одностраничный сайт без сборки: чистые HTML + CSS + JS.
 Открывается двойным кликом по `index.html`, заливается на любой хостинг как есть.
 
+**Живая версия:** https://dendy-d.github.io/mathscoolstar/
+**Репозиторий:** https://github.com/Dendy-D/mathscoolstar
+
+Чтобы обновить сайт после правок — обычный пуш, Pages пересоберётся сам за минуту:
+
+```bash
+git add -A && git commit -m "что поменяли" && git push
+```
+
+### Когда заработает mathscoolstar.ru
+
+1. У регистратора домена прописать A-записи на `185.199.108.153`, `185.199.109.153`,
+   `185.199.110.153`, `185.199.111.153` и CNAME `www` → `dendy-d.github.io`.
+2. В репозитории: **Settings → Pages → Custom domain** вписать `mathscoolstar.ru`,
+   поставить галочку **Enforce HTTPS**.
+3. Заменить базовый адрес `https://dendy-d.github.io/mathscoolstar/` на
+   `https://mathscoolstar.ru/` в двух местах: шапка `index.html` (там комментарий-подсказка)
+   и константа `SITE_URL` в `tools/build-docs.py`. Потом `python3 tools/build-docs.py`.
+4. Вернуть в подвал `index.html` строку со ссылкой на сайт — сейчас она убрана,
+   потому что домен ещё не работает.
+
 ```
 index.html            главная страница — вся разметка и текст
 styles.css            оформление главной
