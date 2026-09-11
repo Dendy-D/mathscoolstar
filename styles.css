@@ -229,12 +229,15 @@ button{ font:inherit; color:inherit; border:0; background:none; cursor:pointer }
 }
 .portrait__badge{
   position:absolute; left:-6px; bottom:34px; z-index:2;
-  display:flex; flex-direction:column; gap:2px;
-  padding:14px 20px; border-radius:12px;
+  display:flex; flex-direction:column; gap:5px;
+  padding:15px 20px; border-radius:12px;
   background:var(--ink); color:var(--paper);
   box-shadow:var(--shadow-md);
 }
-.portrait__badge b{ font-family:var(--font-display); font-size:1.28rem; color:var(--gold); line-height:1 }
+.portrait__badge b{
+  font-family:var(--font-display); font-size:1.04rem; color:var(--gold);
+  line-height:1.22; letter-spacing:-.01em;
+}
 .portrait__badge span{ font-size:.76rem; line-height:1.35; color:var(--muted-light) }
 
 /* ── 6. Цифры ──────────────────────────────────────────────── */
@@ -545,6 +548,9 @@ button{ font:inherit; color:inherit; border:0; background:none; cursor:pointer }
   .footer__col--brand{ grid-column:auto }
   .hero{ padding-top:92px }
   .portrait{ max-width:min(290px,72vw) }
+  .portrait__badge{ padding:12px 15px; bottom:24px; gap:4px }
+  .portrait__badge b{ font-size:.9rem; line-height:1.25 }
+  .portrait__badge span{ font-size:.7rem }
   .eyebrow{ font-size:.67rem; letter-spacing:.13em; gap:9px }
   .eyebrow::before{ width:18px }
   .hero__grid{ gap:32px }
