@@ -3,6 +3,9 @@
 Собирает страницы правовых документов из .docx в docs/*.html.
 Текст переносится дословно; скрипт только размечает заголовки, списки и таблицы.
 
+Исходники лежат в docs/files/*.docx — там же, откуда их скачивают с сайта.
+Обновился документ — положить новый файл под тем же именем и запустить сборку.
+
 Запуск:  python3 tools/build-docs.py
 """
 import html as H, os, re, shutil, zipfile
@@ -12,18 +15,18 @@ W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'docs')
 
-# Базовый адрес сайта. Когда заработает домен — заменить на 'https://mathscoolstar.ru/'
-SITE_URL = 'https://dendy-d.github.io/mathscoolstar/'
+# Базовый адрес сайта
+SITE_URL = 'https://mathscoolstar.ru/'
 
 DOCS = [
     dict(slug='svedeniya',
-         src='/home/dan/Music/1_Основные_сведения_об_образовательной_организации.docx',
+         src='docs/files/svedeniya.docx',
          h1='Основные сведения об образовательной организации',
          desc='Сведения об ИП Василенко А. В.: реквизиты, деятельность, режим обучения.',
          drop=['Основные сведения об образовательной организации'],
          meta=None, lead=0, toc=False),
     dict(slug='oferta',
-         src='/home/dan/Music/3.1 публичная оферта.docx',
+         src='docs/files/oferta.docx',
          h1='Публичная оферта',
          sub='Предложение заключить договор оказания образовательных услуг',
          desc='Публичная оферта ИП Василенко А. В. — договор оказания образовательных услуг.',
@@ -33,7 +36,7 @@ DOCS = [
          meta_src=re.compile(r'^г\.\s*Котельники.*В редакции от'),
          lead=3, toc=True),
     dict(slug='soglasie',
-         src='/home/dan/Music/3_3_согласия_субъекта_на_оработку_перс_данных.docx',
+         src='docs/files/soglasie.docx',
          h1='Согласие субъекта на обработку персональных данных',
          desc='Согласие на обработку персональных данных при обращении через формы сайта.',
          drop=['Согласие субъекта на обработку персональных данных',
@@ -106,7 +109,8 @@ def slugify(s, i):
 
 # ── сборка одной страницы ───────────────────────────────────────────────────
 def build(cfg):
-    items = list(blocks(cfg['src']))
+    src = cfg['src'] if os.path.isabs(cfg['src']) else os.path.join(ROOT, cfg['src'])
+    items = list(blocks(src))
     # выкидываем строки-дубликаты заголовка и строку, ушедшую в подпись
     kept = []
     for kind, val in items:
@@ -147,8 +151,10 @@ def build(cfg):
 
     # исходный .docx кладём рядом для скачивания
     fname = cfg['slug'] + '.docx'
-    shutil.copy2(cfg['src'], os.path.join(OUT, 'files', fname))
-    size_kb = max(1, round(os.path.getsize(cfg['src']) / 1024))
+    dest = os.path.join(OUT, 'files', fname)
+    if os.path.abspath(src) != os.path.abspath(dest):
+        shutil.copy2(src, dest)
+    size_kb = max(1, round(os.path.getsize(dest) / 1024))
 
     toc_html = ''
     if cfg.get('toc') and len(toc) >= 4:
